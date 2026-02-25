@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection Result</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 60px 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 32px;
+            font-weight: 700;
+        }
+        
+        .result {
+            padding: 40px 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            animation: slideIn 0.5s ease;
+        }
+        
+        .result.fraud {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            color: #d32f2f;
+            border-left: 5px solid #d32f2f;
+        }
+        
+        .result.legitimate {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            color: #388e3c;
+            border-left: 5px solid #388e3c;
+        }
+        
+        .result h2 {
+            margin-bottom: 15px;
+            font-size: 36px;
+            font-weight: 700;
+        }
+        
+        .result p {
+            font-size: 16px;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        
+        .probability {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .button-group {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 14px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(102, 126, 234, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .details {
+            text-align: left;
+            background: #f5f7fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        .detail-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-item strong {
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .detail-item span {
+            color: #666;
+            font-size: 15px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 25px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .result h2 {
+                font-size: 28px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Prediction Result</h1>
+        
+        <div id="resultContainer"></div>
+        
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="location.href='/predict'">Analyze Another</button>
+            <button class="btn btn-secondary" onclick="location.href='/'">Back to Home</button>
+        </div>
+    </div>
+    
+    <script>
+        function displayResult() {
+            const resultStr = sessionStorage.getItem('predictionResult');
+            
+            if (!resultStr) {
+                document.getElementById('resultContainer').innerHTML = '<div class="result legitimate"><h2>⚠️ No Result</h2><p>No prediction data found. Please analyze a transaction first.</p></div>';
+                return;
+            }
+            
+            const result = JSON.parse(resultStr);
+            const isFraud = result.prediction === 1;
+            const confidence = (result.confidence * 100).toFixed(2);
+            
+            const resultClass = isFraud ? 'fraud' : 'legitimate';
+            const icon = isFraud ? '⚠️' : '✅';
+            const title = isFraud ? 'Fraudulent Transaction' : 'Legitimate Transaction';
+            const message = isFraud ? 'This transaction appears to be fraudulent and requires verification.' : 'This transaction appears to be safe and legitimate.';
+            const recommendation = isFraud ? 'Review Immediately' : 'Approved';
+            
+            const html = `
+                <div class="result ${resultClass}">
+                    <h2>${icon} ${title}</h2>
+                    <p>${message}</p>
+                    <div class="probability">${confidence}% Confidence</div>
+                </div>
+                <div class="details">
+                    <div class="detail-item">
+                        <strong>Status:</strong>
+                        <span>${isFraud ? '🚫 Fraud' : '✅ Legitimate'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Confidence Score:</strong>
+                        <span>${confidence}%</span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Recommendation:</strong>
+                        <span>${recommendation}</span>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('resultContainer').innerHTML = html;
+            sessionStorage.removeItem('predictionResult');
+        }
+        
+        displayResult();
+    </script>
+</body>
+</html>

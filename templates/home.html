@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Payment Fraud Detection</title>
+
+<style>
+:root{
+    --accent:#00aaff;
+    --text:#ffffff;
+    --muted:#b5c7ff;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Segoe UI',sans-serif;
+    background:
+        radial-gradient(circle at 75% 45%, rgba(0,170,255,0.25), transparent 45%),
+        linear-gradient(180deg,#050b18 0%,#000000 100%);
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:40px;
+    overflow:hidden;
+}
+
+/* Blue Particle Effect */
+body::before{
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background-image:radial-gradient(rgba(0,170,255,0.3) 1px, transparent 1px);
+    background-size:35px 35px;
+    opacity:0.15;
+    animation:moveBg 60s linear infinite;
+}
+
+@keyframes moveBg{
+    from{background-position:0 0;}
+    to{background-position:1000px 1000px;}
+}
+
+.container{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:120px;
+    max-width:1300px;
+    width:100%;
+    align-items:center;
+    position:relative;
+    z-index:2;
+}
+
+h1{
+    color:var(--accent);
+    font-size:clamp(40px,6vw,65px);
+    font-weight:900;
+    margin-bottom:25px;
+}
+
+.subtitle{
+    color:var(--muted);
+    font-size:18px;
+    margin-bottom:40px;
+    max-width:600px;
+}
+
+.feature-list{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+    margin-bottom:45px;
+}
+
+.feature-list li{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    font-weight:600;
+    color:#eaeaea;
+}
+
+.feature-icon{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    border:2px solid var(--accent);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--accent);
+    box-shadow:0 0 15px rgba(0,170,255,0.6);
+}
+
+/* Neon Button */
+.cta-button{
+    padding:18px 55px;
+    border-radius:8px;
+    border:2px solid var(--accent);
+    background:transparent;
+    color:#fff;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    transition:all .3s ease;
+    box-shadow:0 0 25px rgba(0,170,255,0.5);
+    text-decoration:none;
+}
+
+.cta-button:hover{
+    background:var(--accent);
+    box-shadow:0 0 80px rgba(0,170,255,0.9);
+    transform:translateY(-3px);
+}
+
+/* FOX SHIELD IMAGE */
+.graphics{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.fox-logo{
+    width:420px;
+    animation:float 4s ease-in-out infinite;
+    filter:drop-shadow(0 0 20px rgba(0,170,255,0.9))
+           drop-shadow(0 0 60px rgba(0,170,255,0.95));
+}
+
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(18px);}
+}
+
+@media(max-width:1000px){
+    .container{
+        grid-template-columns:1fr;
+        text-align:center;
+    }
+    .graphics{
+        order:-1;
+        margin-bottom:40px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LEFT SIDE -->
+    <div>
+        <h1>Online Payments Fraud Detection</h1>
+        <p class="subtitle">
+            AI-driven cybersecurity for payments — detect attacks in real time and stop fraud before it completes.
+        </p>
+
+        <ul class="feature-list">
+            <li><div class="feature-icon">✓</div>Real-time fraud detection</li>
+            <li><div class="feature-icon">✓</div>Machine-learning powered analysis</li>
+            <li><div class="feature-icon">✓</div>High-accuracy predictions</li>
+            <li><div class="feature-icon">✓</div>Instant transaction verification</li>
+            <li><div class="feature-icon">✓</div>Secure transaction processing</li>
+        </ul>
+
+        <a href="/predict" class="cta-button">Start Analysis</a>
+    </div>
+
+    <!-- RIGHT SIDE FOX SHIELD -->
+    <div class="graphics">
+        <img src="{{ url_for('static', filename='images/Banner image.png') }}" 
+             class="fox-logo" 
+             alt="Fox Shield">
+    </div>
+
+</div>
+
+</body>
+</html>
